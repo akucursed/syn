@@ -3,20 +3,5 @@
     "name": "Anim Force",
     "file": "anim_force.lua",
     "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/anim_force.lua"
-  },
-  {
-    "name": "Auto Parry",
-    "file": "auto_parry.lua",
-    "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/auto_parry.lua"
-  },
-  {
-    "name": "Custom Crosshair",
-    "file": "crosshair.lua",
-    "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/crosshair.lua"
-  },
-  {
-    "name": "Chat Spammer",
-    "file": "chat_spammer.lua",
-    "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/chat_spammer.lua"
   }
 ]

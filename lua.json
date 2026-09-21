@@ -1,33 +1,21 @@
 [
   {
     "name": "Anim Force",
-    "description": "Character animation speed & pose modifier with custom keybinds",
-    "author": "aku",
-    "version": "1.0",
     "file": "anim_force.lua",
     "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/anim_force.lua"
   },
   {
     "name": "Auto Parry",
-    "description": "Automated combat deflections & timing helper",
-    "author": "aku",
-    "version": "1.1",
     "file": "auto_parry.lua",
     "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/auto_parry.lua"
   },
   {
     "name": "Custom Crosshair",
-    "description": "Drawing API crosshair overlay with customizable styles",
-    "author": "aku",
-    "version": "1.2",
     "file": "crosshair.lua",
     "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/crosshair.lua"
   },
   {
     "name": "Chat Spammer",
-    "description": "Automated customizable chat sender queue",
-    "author": "aku",
-    "version": "1.0",
     "file": "chat_spammer.lua",
     "url": "https://raw.githubusercontent.com/akucursed/syn/main/luas/chat_spammer.lua"
   }

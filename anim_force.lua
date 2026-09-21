@@ -1,82 +1,86 @@
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 
-local lp = Players.LocalPlayer
+local LocalPlayer = Players.LocalPlayer
+local AnimForce = {}
 
-local AnimForce = {
-    Enabled = true,
-    SpeedMult = 2.0,
-    PoseFreeze = false,
-    Conn = nil
+local connection = nil
+local isEnabled = false
+
+local Config = {
+    Speed = 1.0,
+    FreezeOnDisable = true,
 }
 
-local function onRender()
-    if not AnimForce.Enabled then return end
-    local char = lp.Character
-    if not char then return end
-    local hum = char:FindFirstChildOfClass("Humanoid")
-    if not hum then return end
-    local animator = hum:FindFirstChildOfClass("Animator")
+local function applyAnimForce()
+    local character = LocalPlayer.Character
+    if not character then return end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+    local animator = humanoid:FindFirstChildOfClass("Animator")
     if not animator then return end
+    for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
+        track:AdjustSpeed(Config.Speed)
+    end
+end
 
-    local tracks = animator:GetPlayingAnimationTracks()
-    for i = 1, #tracks do
-        local track = tracks[i]
-        if track and track.IsPlaying then
-            if AnimForce.PoseFreeze then
-                track:AdjustSpeed(0)
-            else
-                track:AdjustSpeed(AnimForce.SpeedMult)
-            end
+local function stopAnimForce()
+    local character = LocalPlayer.Character
+    if not character then return end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+    local animator = humanoid:FindFirstChildOfClass("Animator")
+    if not animator then return end
+    if Config.FreezeOnDisable then
+        for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
+            track:AdjustSpeed(0)
+        end
+    else
+        for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
+            track:AdjustSpeed(1)
         end
     end
 end
 
-AnimForce.Conn = RunService.RenderStepped:Connect(onRender)
-
-function AnimForce:Unload()
-    if AnimForce.Conn then
-        AnimForce.Conn:Disconnect()
-        AnimForce.Conn = nil
-    end
-    AnimForce.Enabled = false
-    local char = lp.Character
-    local hum = char and char:FindFirstChildOfClass("Humanoid")
-    local animator = hum and hum:FindFirstChildOfClass("Animator")
-    if animator then
-        local tracks = animator:GetPlayingAnimationTracks()
-        for i = 1, #tracks do
-            tracks[i]:AdjustSpeed(1.0)
+function AnimForce.Enable()
+    if isEnabled then return end
+    isEnabled = true
+    connection = RunService.Heartbeat:Connect(function()
+        if isEnabled then
+            applyAnimForce()
         end
+    end)
+end
+
+function AnimForce.Disable()
+    if not isEnabled then return end
+    isEnabled = false
+    if connection then
+        connection:Disconnect()
+        connection = nil
     end
+    stopAnimForce()
 end
 
 function AnimForce.Settings(sub)
-    sub:CreateToggle({
-        Name = "Enabled",
-        Default = AnimForce.Enabled,
-        Callback = function(enabled)
-            AnimForce.Enabled = enabled
-        end
-    })
-
     sub:CreateSlider({
-        Name = "Speed Multiplier",
-        Min = 0.1,
-        Max = 10,
-        Default = AnimForce.SpeedMult,
-        Step = 0.1,
+        Name = "Animation Speed",
+        Flag = "AnimForce_Speed",
+        Min = 0,
+        Max = 5,
+        Default = 1.0,
         Decimals = 1,
         Callback = function(val)
-            AnimForce.SpeedMult = val
+            Config.Speed = val
         end
     })
 
     sub:CreateToggle({
-        Name = "Freeze Pose",
-        Default = AnimForce.PoseFreeze,
-        Callback = function(enabled)
-            AnimForce.PoseFreeze = enabled
+        Name = "Freeze On Disable",
+        Flag = "AnimForce_Freeze",
+        Default = true,
+        Callback = function(state)
+            Config.FreezeOnDisable = state
         end
     })
 end

@@ -1,16 +1,16 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 
 local lp = Players.LocalPlayer
 
 local AnimForce = {
     Enabled = true,
     SpeedMult = 2.0,
+    PoseFreeze = false,
     Conn = nil
 }
 
-local function onStepped()
+local function onRender()
     if not AnimForce.Enabled then return end
     local char = lp.Character
     if not char then return end
@@ -23,12 +23,16 @@ local function onStepped()
     for i = 1, #tracks do
         local track = tracks[i]
         if track and track.IsPlaying then
-            track:AdjustSpeed(AnimForce.SpeedMult)
+            if AnimForce.PoseFreeze then
+                track:AdjustSpeed(0)
+            else
+                track:AdjustSpeed(AnimForce.SpeedMult)
+            end
         end
     end
 end
 
-AnimForce.Conn = RunService.RenderStepped:Connect(onStepped)
+AnimForce.Conn = RunService.RenderStepped:Connect(onRender)
 
 function AnimForce:Unload()
     if AnimForce.Conn then
@@ -45,6 +49,36 @@ function AnimForce:Unload()
             tracks[i]:AdjustSpeed(1.0)
         end
     end
+end
+
+function AnimForce.Settings(sub)
+    sub:CreateToggle({
+        Name = "Enabled",
+        Default = AnimForce.Enabled,
+        Callback = function(enabled)
+            AnimForce.Enabled = enabled
+        end
+    })
+
+    sub:CreateSlider({
+        Name = "Speed Multiplier",
+        Min = 0.1,
+        Max = 10,
+        Default = AnimForce.SpeedMult,
+        Step = 0.1,
+        Decimals = 1,
+        Callback = function(val)
+            AnimForce.SpeedMult = val
+        end
+    })
+
+    sub:CreateToggle({
+        Name = "Freeze Pose",
+        Default = AnimForce.PoseFreeze,
+        Callback = function(enabled)
+            AnimForce.PoseFreeze = enabled
+        end
+    })
 end
 
 return AnimForce

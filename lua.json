@@ -3,5 +3,20 @@
     "name": "Anim Force",
     "file": "anim_force.bin",
     "url": "https://raw.githubusercontent.com/akucursed/syn/refs/heads/main/anim_force.bin"
+  },
+  {
+    "name": "Town",
+    "file": "town.bin",
+    "url": "https://raw.githubusercontent.com/akucursed/syn/refs/heads/main/town.bin"
+  },
+  {
+    "name": "Velocity Spoof",
+    "file": "velocity_spoof.bin",
+    "url": "https://raw.githubusercontent.com/akucursed/syn/refs/heads/main/velocity_spoof.bin"
+  },
+  {
+    "name": "Custom Movement",
+    "file": "custom_movement.bin",
+    "url": "https://raw.githubusercontent.com/akucursed/syn/refs/heads/main/custom_movement.bin"
   }
 ]
